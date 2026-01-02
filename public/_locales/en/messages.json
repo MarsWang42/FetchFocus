@@ -1,13 +1,13 @@
 {
     "extensionName": {
-        "message": "FetchFocus - A gentle companion that helps you stay focused on what matters",
+        "message": "FetchFocus - A companion that helps you stay focused",
         "description": "Extension name"
     },
     "active": {
         "message": "Active"
     },
     "extDescription": {
-        "message": "A gentle companion that helps you stay focused on what matters",
+        "message": "A gentle companion that helps you stay focused",
         "description": "Extension description"
     },
     "currentFocusSession": {
