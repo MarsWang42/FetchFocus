@@ -7,7 +7,7 @@
         "message": "Active"
     },
     "extDescription": {
-        "message": "A gentle companion that helps you stay focused",
+        "message": "A friendly pup that nudges you back on track when you drift—detects doomscrolling and off-topic browsing.",
         "description": "Extension description"
     },
     "currentFocusSession": {
