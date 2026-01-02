@@ -1,0 +1,363 @@
+{
+    "extensionName": {
+        "message": "FetchFocus",
+        "description": "Extension name"
+    },
+    "active": {
+        "message": "Active"
+    },
+    "extDescription": {
+        "message": "A gentle companion that helps you stay focused on what matters",
+        "description": "Extension description"
+    },
+    "currentFocusSession": {
+        "message": "Current Focus Session",
+        "description": "Focus Session section header"
+    },
+    "startFocusSession": {
+        "message": "Start Focus Session",
+        "description": "Button to start a focus session"
+    },
+    "startingFocus": {
+        "message": "Starting Focus...",
+        "description": "Button text when starting focus"
+    },
+    "focusSessionPlaceholder": {
+        "message": "Choose a task or enter a goal...",
+        "description": "Placeholder for focus session description"
+    },
+    "endFocusSession": {
+        "message": "End Focus Session",
+        "description": "Button to end focus session"
+    },
+    "focusingForHMS": {
+        "message": "$HOURS$h $MINUTES$m $SECONDS$s",
+        "description": "Shows focus duration with hours, minutes, seconds",
+        "placeholders": {
+            "hours": {
+                "content": "$1"
+            },
+            "minutes": {
+                "content": "$2"
+            },
+            "seconds": {
+                "content": "$3"
+            }
+        }
+    },
+    "focusingForMS": {
+        "message": "$MINUTES$m $SECONDS$s",
+        "description": "Shows focus duration with minutes and seconds",
+        "placeholders": {
+            "minutes": {
+                "content": "$1"
+            },
+            "seconds": {
+                "content": "$2"
+            }
+        }
+    },
+    "focusingForS": {
+        "message": "$SECONDS$s",
+        "description": "Shows focus duration with seconds only",
+        "placeholders": {
+            "seconds": {
+                "content": "$1"
+            }
+        }
+    },
+    "todoList": {
+        "message": "To-Do List",
+        "description": "Todo list section header"
+    },
+    "addTodo": {
+        "message": "Add a task...",
+        "description": "Placeholder for todo input"
+    },
+    "aiContentAnalysis": {
+        "message": "AI Content Analysis",
+        "description": "AI feature name"
+    },
+    "localGeminiNano": {
+        "message": "Local Gemini Nano detection",
+        "description": "AI feature description"
+    },
+    "aiTab": {
+        "message": "AI"
+    },
+    "aiDescription": {
+        "message": "Enable AI-powered content analysis to detect when you drift away from your focus task. This feature uses local AI models and never sends your data to external servers."
+    },
+    "aiStatusEnabled": {
+        "message": "AI analysis is active"
+    },
+    "aiStatusDisabled": {
+        "message": "AI analysis is off"
+    },
+    "nudgeTitle": {
+        "message": "Hey, are you there?",
+        "description": "General nudge title (fallback)"
+    },
+    "standardNudgeTitle1": {
+        "message": "Squirrel?! 🐿️"
+    },
+    "standardNudgeBody1": {
+        "message": "Wait, that's just a distraction. Let's chase the real goal instead!"
+    },
+    "standardNudgeTitle2": {
+        "message": "I fetched this for you!"
+    },
+    "standardNudgeBody2": {
+        "message": "It's your focus! I found it over in the other tab. Wanna come get it?"
+    },
+    "standardNudgeTitle3": {
+        "message": "Did someone say treats?"
+    },
+    "standardNudgeBody3": {
+        "message": "I only get treats when you finish your tasks. Please? For me?"
+    },
+    "standardNudgeTitle4": {
+        "message": "Who's a good worker?"
+    },
+    "standardNudgeBody4": {
+        "message": "You are! Or... you will be, once we head back to our mission."
+    },
+    "standardNudgeTitle5": {
+        "message": "Ball dropped!"
+    },
+    "standardNudgeBody5": {
+        "message": "You dropped the ball on your task! It's okay, let's pick it up and keep going."
+    },
+    "doomScrollNudgeTitle1": {
+        "message": "Tilts head �"
+    },
+    "doomScrollNudgeBody1": {
+        "message": "I'm confused. I thought we were working on something else? Let's go back."
+    },
+    "doomScrollNudgeTitle2": {
+        "message": "Is there a treat down here? 🦴"
+    },
+    "doomScrollNudgeBody2": {
+        "message": "You've been scrolling for a long time! I don't think the work is at the bottom of this page."
+    },
+    "doomScrollNudgeTitle3": {
+        "message": "My paws are tired... 🐾"
+    },
+    "doomScrollNudgeBody3": {
+        "message": "This feed is endless, but our time isn't! Let's go fetch some productivity."
+    },
+    "doomScrollNudgeTitle4": {
+        "message": "Whines softly 🥺"
+    },
+    "doomScrollNudgeBody4": {
+        "message": "I'm getting dizzy from all this scrolling. Can we go back to the important stuff?"
+    },
+    "doomScrollNudgeTitle5": {
+        "message": "Squirrel?! 🐿️"
+    },
+    "doomScrollNudgeBody5": {
+        "message": "Just kidding. But now that I have your attention, stop scrolling and let's focus!"
+    },
+    "rapidSwitchNudgeTitle1": {
+        "message": "Whoa, slow down! 🌪️"
+    },
+    "rapidSwitchNudgeBody1": {
+        "message": "You're clicking faster than I can wag my tail! Let's pick one task and stick to it."
+    },
+    "rapidSwitchNudgeTitle2": {
+        "message": "Sniff sniff 👃"
+    },
+    "rapidSwitchNudgeBody2": {
+        "message": "I smell distraction. You're jumping around a lot. Let's find the scent of our main project again."
+    },
+    "rapidSwitchNudgeTitle3": {
+        "message": "Browser Zoomies? ⚡"
+    },
+    "rapidSwitchNudgeBody3": {
+        "message": "You're running all over the place! Sit. Stay. Focus on one tab."
+    },
+    "rapidSwitchNudgeTitle4": {
+        "message": "I'm lost! 🗺️"
+    },
+    "rapidSwitchNudgeBody4": {
+        "message": "Too many tabs, too fast! Which one were we actually working on?"
+    },
+    "rapidSwitchNudgeTitle5": {
+        "message": "Barks once �"
+    },
+    "rapidSwitchNudgeBody5": {
+        "message": "Hey! Stop flickering around. Deep breath. One thing at a time."
+    },
+    "stagnantTabNudgeTitle1": {
+        "message": "Nudges hand 🐽"
+    },
+    "stagnantTabNudgeBody1": {
+        "message": "We've been staring at this for a while. Is this related to work, or are we daydreaming?"
+    },
+    "stagnantTabNudgeTitle2": {
+        "message": "Barking up the wrong tree? 🌳"
+    },
+    "stagnantTabNudgeBody2": {
+        "message": "This page looks interesting, but it doesn't look like our project. Let's swap back."
+    },
+    "stagnantTabNudgeTitle3": {
+        "message": "Scratches screen 🚪"
+    },
+    "stagnantTabNudgeBody3": {
+        "message": "Let me out! We've been stuck on this off-topic page for ages. Back to work!"
+    },
+    "stagnantTabNudgeTitle4": {
+        "message": "Nap time? 💤"
+    },
+    "stagnantTabNudgeBody4": {
+        "message": "You haven't moved in a while. If we aren't working, can we go for a walk instead? Or just work."
+    },
+    "stagnantTabNudgeTitle5": {
+        "message": "Hello? Human? 🔭"
+    },
+    "stagnantTabNudgeBody5": {
+        "message": "I think you got lost in the internet rabbit hole. Grab my collar, I'll lead you back to work."
+    },
+    "imResearching": {
+        "message": "I'm Researching",
+        "description": "Button to dismiss mission nudge"
+    },
+    "backToFocus": {
+        "message": "Back to Focus",
+        "description": "Button to dismiss regular nudge"
+    },
+    "refocus": {
+        "message": "Let's refocus on what matters",
+        "description": "Regular nudge subtitle"
+    },
+    "willCreateNewTask": {
+        "message": "✨ Will be added as a new todo task",
+        "description": "Hint that a new todo will be created when starting focus"
+    },
+    "stop": {
+        "message": "Stop",
+        "description": "Button to stop/end focus session"
+    },
+    "complete": {
+        "message": "Complete",
+        "description": "Button to complete and end focus session"
+    },
+    "completeFocusSession": {
+        "message": "Complete Focus & Mark Done",
+        "description": "Tooltip for complete focus session button"
+    },
+    "relaunchChromeNote": {
+        "message": "⚠️ After enabling, relaunch Chrome for changes to take effect.",
+        "description": "Note about relaunching Chrome after enabling flags"
+    },
+    "withTab": {
+        "message": "with",
+        "description": "Prefix text before showing current tab info"
+    },
+    "keywordsPlaceholder": {
+        "message": "Add keywords (press Enter)...",
+        "description": "Placeholder for keywords chip input"
+    },
+    "doomscrollingReason": {
+        "message": "You've been scrolling for a while. Looks like you might be doomscrolling.",
+        "description": "Reason shown when doomscrolling is detected"
+    },
+    "settingsTitle": {
+        "message": "Settings"
+    },
+    "settingsDescription": {
+        "message": "Manage your focus preferences"
+    },
+    "blacklist": {
+        "message": "Blacklist"
+    },
+    "whitelist": {
+        "message": "Whitelist"
+    },
+    "calendar": {
+        "message": "Calendar"
+    },
+    "blacklistDescription": {
+        "message": "Sites on your blacklist will show a warning before you can access them. Use this to block distracting websites."
+    },
+    "blacklistExample": {
+        "message": "Examples: twitter.com, *.reddit.com, youtube.com"
+    },
+    "whitelistDescription": {
+        "message": "Sites on your whitelist will never trigger focus drift nudges. Use this for work-related sites."
+    },
+    "whitelistExample": {
+        "message": "Examples: docs.google.com, github.com, stackoverflow.com"
+    },
+    "addDomainPlaceholder": {
+        "message": "Enter domain (e.g., twitter.com)"
+    },
+    "noBlacklistEntries": {
+        "message": "No blocked sites yet"
+    },
+    "noWhitelistEntries": {
+        "message": "No whitelisted sites yet"
+    },
+    "footerTagline": {
+        "message": "Your gentle focus companion 🐕"
+    },
+    "blacklistWarningTitle": {
+        "message": "Hold on, friend! 🐾"
+    },
+    "blacklistWarningMessage": {
+        "message": "You've blocked this site to help you stay focused. Are you sure you want to visit?"
+    },
+    "blacklistWarningSubtext": {
+        "message": "This warning won't appear again for this tab"
+    },
+    "goBack": {
+        "message": "Go Back"
+    },
+    "proceedAnyway": {
+        "message": "Proceed"
+    },
+    "completedTodayMessage": {
+        "message": "$COUNT$ task(s) completed today",
+        "description": "Message showing how many tasks were completed today",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "3"
+            }
+        }
+    },
+    "focusTabAwayNudgeTitle1": {
+        "message": "Miss me? 🐕"
+    },
+    "focusTabAwayNudgeBody1": {
+        "message": "It's been a while! Your focus tab is getting lonely over there."
+    },
+    "focusTabAwayNudgeTitle2": {
+        "message": "Walks back over... 🐾"
+    },
+    "focusTabAwayNudgeBody2": {
+        "message": "You haven't checked on your work in a while. Ready to head back?"
+    },
+    "focusTabAwayNudgeTitle3": {
+        "message": "Tail wag detected! 🎯"
+    },
+    "focusTabAwayNudgeBody3": {
+        "message": "Your focus tab is still waiting for you! Want to return to it?"
+    },
+    "focusTabAwayNudgeTitle4": {
+        "message": "Paws on your leg 🦮"
+    },
+    "focusTabAwayNudgeBody4": {
+        "message": "Hey! Remember that thing you were working on? It's still there!"
+    },
+    "focusTabAwayNudgeTitle5": {
+        "message": "Hopeful eyes 🥺"
+    },
+    "focusTabAwayNudgeBody5": {
+        "message": "10 minutes away from work... Want me to fetch your focus tab?"
+    },
+    "focusTabAwayReason": {
+        "message": "You've been away from your focus tab for 10 minutes.",
+        "description": "Reason shown when user hasn't visited focus tab in 10 minutes"
+    }
+}

@@ -1,0 +1,9 @@
+/* Configs page specific styles */
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fefce8 0%, #fef3c7 50%, #fef9c3 100%);
+}
+
+#root {
+    min-height: 100vh;
+}

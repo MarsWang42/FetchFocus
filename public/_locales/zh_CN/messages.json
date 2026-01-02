@@ -1,0 +1,363 @@
+{
+    "extensionName": {
+        "message": "FetchFocus",
+        "description": "Extension name"
+    },
+    "active": {
+        "message": "运行中"
+    },
+    "extDescription": {
+        "message": "陪你高效完成目标的小助手",
+        "description": "Extension description"
+    },
+    "currentFocusSession": {
+        "message": "当前目标",
+        "description": "Focus Session section header"
+    },
+    "startFocusSession": {
+        "message": "进入状态",
+        "description": "Button to start a focus session"
+    },
+    "startingFocus": {
+        "message": "正在启动...",
+        "description": "Button text when starting focus"
+    },
+    "focusSessionPlaceholder": {
+        "message": "接下来想认真做点什么？",
+        "description": "Placeholder for focus session description"
+    },
+    "endFocusSession": {
+        "message": "休息一下",
+        "description": "Button to end focus session"
+    },
+    "focusingForHMS": {
+        "message": "已专注 $HOURS$小时 $MINUTES$分 $SECONDS$秒",
+        "description": "Shows focus duration with hours, minutes, seconds",
+        "placeholders": {
+            "hours": {
+                "content": "$1"
+            },
+            "minutes": {
+                "content": "$2"
+            },
+            "seconds": {
+                "content": "$3"
+            }
+        }
+    },
+    "focusingForMS": {
+        "message": "已专注 $MINUTES$分 $SECONDS$秒",
+        "description": "Shows focus duration with minutes and seconds",
+        "placeholders": {
+            "minutes": {
+                "content": "$1"
+            },
+            "seconds": {
+                "content": "$2"
+            }
+        }
+    },
+    "focusingForS": {
+        "message": "已专注 $SECONDS$秒",
+        "description": "Shows focus duration with seconds only",
+        "placeholders": {
+            "seconds": {
+                "content": "$1"
+            }
+        }
+    },
+    "todoList": {
+        "message": "待办清单",
+        "description": "Todo list section header"
+    },
+    "addTodo": {
+        "message": "加个新任务...",
+        "description": "Placeholder for todo input"
+    },
+    "aiContentAnalysis": {
+        "message": "AI 内容分析",
+        "description": "AI feature name"
+    },
+    "localGeminiNano": {
+        "message": "本地 Gemini Nano 支持",
+        "description": "AI feature description"
+    },
+    "aiTab": {
+        "message": "AI"
+    },
+    "aiDescription": {
+        "message": "启用 AI 内容分析功能，帮助检测你是否偏离了专注任务。此功能使用本地 AI 模型，不会将数据发送到外部服务器。"
+    },
+    "aiStatusEnabled": {
+        "message": "AI 分析已开启"
+    },
+    "aiStatusDisabled": {
+        "message": "AI 分析已关闭"
+    },
+    "nudgeTitle": {
+        "message": "哈喽，还在吗？",
+        "description": "General nudge title (fallback)"
+    },
+    "standardNudgeTitle1": {
+        "message": "歪？还在吗？"
+    },
+    "standardNudgeBody1": {
+        "message": "你的修勾正在等你回原来的页面干活呢～"
+    },
+    "standardNudgeTitle2": {
+        "message": "想吃罐罐了🍖"
+    },
+    "standardNudgeBody2": {
+        "message": "不干活哪有钱给我买罐罐呀！快回去搬砖～"
+    },
+    "standardNudgeTitle3": {
+        "message": "尾巴都摇累了"
+    },
+    "standardNudgeBody3": {
+        "message": "你怎么跑到这里来了？原来的任务还在等你诶～"
+    },
+    "standardNudgeTitle4": {
+        "message": "嗷呜～"
+    },
+    "standardNudgeBody4": {
+        "message": "别看别的啦，看我！...不对，看任务！"
+    },
+    "standardNudgeTitle5": {
+        "message": "做完给你撸！"
+    },
+    "standardNudgeBody5": {
+        "message": "快点回去把事情做完，然后就让你随便撸狗头！"
+    },
+    "doomScrollNudgeTitle1": {
+        "message": "歪头杀"
+    },
+    "doomScrollNudgeBody1": {
+        "message": "我晕。我们不是在忙别的事情吗？快回去工作啦。"
+    },
+    "doomScrollNudgeTitle2": {
+        "message": "底下藏着骨头吗？🦴"
+    },
+    "doomScrollNudgeBody2": {
+        "message": "你已经划了好久了！我觉得工作的答案不在这个页面底部哦。"
+    },
+    "doomScrollNudgeTitle3": {
+        "message": "爪子都划累了... 🐾"
+    },
+    "doomScrollNudgeBody3": {
+        "message": "信息流是无穷无尽的，但我们的时间有限！去把生产力找回来吧！"
+    },
+    "doomScrollNudgeTitle4": {
+        "message": "小声呜咽 🥺"
+    },
+    "doomScrollNudgeBody4": {
+        "message": "屏幕转得我头好晕。我们能不能回到正经事上去呀？"
+    },
+    "doomScrollNudgeTitle5": {
+        "message": "有松鼠？！🐿️"
+    },
+    "doomScrollNudgeBody5": {
+        "message": "骗你的。不过既然你停下来了，别再刷了，专心一点嘛！"
+    },
+    "rapidSwitchNudgeTitle1": {
+        "message": "哇，慢一点！🌪️"
+    },
+    "rapidSwitchNudgeBody1": {
+        "message": "你切换网页的速度比我摇尾巴还快！咱们定下心来做一个任务好不好？"
+    },
+    "rapidSwitchNudgeTitle2": {
+        "message": "嗅嗅 👃"
+    },
+    "rapidSwitchNudgeBody2": {
+        "message": "我闻到了分心的味道。你在到处乱跳哦，快找回主线任务的气味！"
+    },
+    "rapidSwitchNudgeTitle3": {
+        "message": "你也太快了吧"
+    },
+    "rapidSwitchNudgeBody3": {
+        "message": "你是吃了兴奋剂吗？坐,别动。专注在一个标签页上！"
+    },
+    "rapidSwitchNudgeTitle4": {
+        "message": "我迷路了！🗺️"
+    },
+    "rapidSwitchNudgeBody4": {
+        "message": "太多标签了，太快了！我们到底在做哪一个工作呀？"
+    },
+    "rapidSwitchNudgeTitle5": {
+        "message": "汪！📢"
+    },
+    "rapidSwitchNudgeBody5": {
+        "message": "嘿！别再闪来闪去了。深呼吸。一次只做一件事。"
+    },
+    "stagnantTabNudgeTitle1": {
+        "message": "用鼻子拱你"
+    },
+    "stagnantTabNudgeBody1": {
+        "message": "我们盯着这个看很久了。这是工作内容吗？还是我们在做白日梦？"
+    },
+    "stagnantTabNudgeTitle2": {
+        "message": "这是哪儿呀"
+    },
+    "stagnantTabNudgeBody2": {
+        "message": "这个页面看起来很有趣，但好像跟我们的项目没关系耶。切回去吧？"
+    },
+    "stagnantTabNudgeTitle3": {
+        "message": "挠屏幕 🚪"
+    },
+    "stagnantTabNudgeBody3": {
+        "message": "放我出去！我们在这个摸鱼页面待太久了。回去干活啦！"
+    },
+    "stagnantTabNudgeTitle4": {
+        "message": "午睡时间到了？💤"
+    },
+    "stagnantTabNudgeBody4": {
+        "message": "你好像很久没操作了。如果不工作的话，带我去散步好不好？不然就专心工作嘛。"
+    },
+    "stagnantTabNudgeTitle5": {
+        "message": "哈罗？主人？🔭"
+    },
+    "stagnantTabNudgeBody5": {
+        "message": "我觉得你在网络兔洞里迷路了。抓紧我的项圈，我带你回工作区！"
+    },
+    "imResearching": {
+        "message": "没，我在查资料",
+        "description": "Button to dismiss mission nudge"
+    },
+    "backToFocus": {
+        "message": "带我回到正轨",
+        "description": "Button to dismiss regular nudge"
+    },
+    "refocus": {
+        "message": "该收收心咯",
+        "description": "Regular nudge subtitle"
+    },
+    "willCreateNewTask": {
+        "message": "✨ 将作为新待办任务添加",
+        "description": "Hint that a new todo will be created when starting focus"
+    },
+    "stop": {
+        "message": "结束",
+        "description": "Button to stop/end focus session"
+    },
+    "complete": {
+        "message": "完成",
+        "description": "Button to complete and end focus session"
+    },
+    "completeFocusSession": {
+        "message": "完成目标并打钩",
+        "description": "Tooltip for complete focus session button"
+    },
+    "relaunchChromeNote": {
+        "message": "⚠️ 启用后得重启 Chrome 才能生效。",
+        "description": "Note about relaunching Chrome after enabling flags"
+    },
+    "withTab": {
+        "message": "关联页面",
+        "description": "Prefix text before showing current tab info"
+    },
+    "keywordsPlaceholder": {
+        "message": "输入关键词 (按回车)...",
+        "description": "Placeholder for keywords chip input"
+    },
+    "doomscrollingReason": {
+        "message": "你已经刷了好一会儿了，看起来有点停不下来呢～",
+        "description": "Reason shown when doomscrolling is detected"
+    },
+    "settingsTitle": {
+        "message": "设置"
+    },
+    "settingsDescription": {
+        "message": "管理你的专注偏好"
+    },
+    "blacklist": {
+        "message": "黑名单"
+    },
+    "whitelist": {
+        "message": "白名单"
+    },
+    "calendar": {
+        "message": "日历"
+    },
+    "blacklistDescription": {
+        "message": "黑名单中的网站会在访问前显示警告。用来屏蔽让你分心的网站。"
+    },
+    "blacklistExample": {
+        "message": "例如：twitter.com、*.reddit.com、youtube.com"
+    },
+    "whitelistDescription": {
+        "message": "白名单中的网站不会触发走神提醒。用于工作相关的网站。"
+    },
+    "whitelistExample": {
+        "message": "例如：docs.google.com、github.com、stackoverflow.com"
+    },
+    "addDomainPlaceholder": {
+        "message": "输入域名（如 twitter.com）"
+    },
+    "noBlacklistEntries": {
+        "message": "还没有屏蔽的网站"
+    },
+    "noWhitelistEntries": {
+        "message": "还没有白名单网站"
+    },
+    "footerTagline": {
+        "message": "你的专注小伙伴 🐕"
+    },
+    "blacklistWarningTitle": {
+        "message": "等一下，朋友！🐾"
+    },
+    "blacklistWarningMessage": {
+        "message": "你把这个网站拉黑了，是为了帮自己保持专注。确定要访问吗？"
+    },
+    "blacklistWarningSubtext": {
+        "message": "在当前标签页不会再显示此警告"
+    },
+    "goBack": {
+        "message": "返回"
+    },
+    "proceedAnyway": {
+        "message": "继续访问"
+    },
+    "completedTodayMessage": {
+        "message": "今天已完成 $COUNT$ 项任务",
+        "description": "Message showing how many tasks were completed today",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "3"
+            }
+        }
+    },
+    "focusTabAwayNudgeTitle1": {
+        "message": "想我了吗？🐕"
+    },
+    "focusTabAwayNudgeBody1": {
+        "message": "好久不见！你的专注页面在那边等得好孤单呢。"
+    },
+    "focusTabAwayNudgeTitle2": {
+        "message": "走回来看你... 🐾"
+    },
+    "focusTabAwayNudgeBody2": {
+        "message": "你已经很久没看工作了。准备好回去了吗？"
+    },
+    "focusTabAwayNudgeTitle3": {
+        "message": "检测到摇尾巴！🎯"
+    },
+    "focusTabAwayNudgeBody3": {
+        "message": "你的专注页面还在等你！要回去看看吗？"
+    },
+    "focusTabAwayNudgeTitle4": {
+        "message": "用爪子碰你的腿 🦮"
+    },
+    "focusTabAwayNudgeBody4": {
+        "message": "嘿！还记得你在做的那件事吗？它还在那儿等你呢！"
+    },
+    "focusTabAwayNudgeTitle5": {
+        "message": "期待的眼神 🥺"
+    },
+    "focusTabAwayNudgeBody5": {
+        "message": "已经离开工作10分钟了...要我帮你把专注页面叼回来吗？"
+    },
+    "focusTabAwayReason": {
+        "message": "你已经离开专注页面10分钟了。",
+        "description": "Reason shown when user hasn't visited focus tab in 10 minutes"
+    }
+}

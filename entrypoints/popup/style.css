@@ -1,0 +1,10 @@
+@import '../../assets/globals.css';
+
+/* Popup-specific styles */
+html,
+body {
+  width: 360px;
+  min-height: 400px;
+  margin: 0;
+  padding: 0;
+}
