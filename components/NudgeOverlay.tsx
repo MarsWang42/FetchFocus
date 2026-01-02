@@ -10,16 +10,15 @@ const t = (key: string) => {
 
 const NUDGE_VARIANT_COUNT = 5;
 
-type NudgeCategory = 'doomScroll' | 'rapidSwitch' | 'stagnantTab' | 'focusTabAway' | 'standard';
+type NudgeCategory = 'doomScroll' | 'unrelatedContent' | 'focusTabAway' | 'standard';
 
 function getNudgeCategoryFromType(nudgeType?: NudgeData['nudgeType']): NudgeCategory {
   switch (nudgeType) {
     case 'doomscrolling':
       return 'doomScroll';
     case 'tab_switching':
-      return 'rapidSwitch';
     case 'content_unrelated':
-      return 'stagnantTab';
+      return 'unrelatedContent';
     case 'focus_tab_away':
       return 'focusTabAway';
     default:

@@ -158,65 +158,35 @@
     "doomScrollNudgeBody5": {
         "message": "骗你的。不过既然你停下来了，别再刷了，专心一点嘛！"
     },
-    "rapidSwitchNudgeTitle1": {
-        "message": "哇，慢一点！🌪️"
-    },
-    "rapidSwitchNudgeBody1": {
-        "message": "你切换网页的速度比我摇尾巴还快！咱们定下心来做一个任务好不好？"
-    },
-    "rapidSwitchNudgeTitle2": {
+    "unrelatedContentNudgeTitle1": {
         "message": "嗅嗅 👃"
     },
-    "rapidSwitchNudgeBody2": {
-        "message": "我闻到了分心的味道。你在到处乱跳哦，快找回主线任务的气味！"
+    "unrelatedContentNudgeBody1": {
+        "message": "这味道不对劲... 这好像不是工作的味道？我们是不是跑题啦？"
     },
-    "rapidSwitchNudgeTitle3": {
-        "message": "你也太快了吧"
+    "unrelatedContentNudgeTitle2": {
+        "message": "捡错球啦！🎾"
     },
-    "rapidSwitchNudgeBody3": {
-        "message": "你是吃了兴奋剂吗？坐,别动。专注在一个标签页上！"
+    "unrelatedContentNudgeBody2": {
+        "message": "哎呀，我们追错目标了！这个网页好像不是我们今天要捡的'球'哦。"
     },
-    "rapidSwitchNudgeTitle4": {
-        "message": "我迷路了！🗺️"
+    "unrelatedContentNudgeTitle3": {
+        "message": "迷路了吗？🐾"
     },
-    "rapidSwitchNudgeBody4": {
-        "message": "太多标签了，太快了！我们到底在做哪一个工作呀？"
+    "unrelatedContentNudgeBody3": {
+        "message": "这里看起来不像工作区耶。我觉得我们走偏了，快跟我回主路上去吧。"
     },
-    "rapidSwitchNudgeTitle5": {
-        "message": "汪！📢"
+    "unrelatedContentNudgeTitle4": {
+        "message": "可怜巴巴 🥺"
     },
-    "rapidSwitchNudgeBody5": {
-        "message": "嘿！别再闪来闪去了。深呼吸。一次只做一件事。"
+    "unrelatedContentNudgeBody4": {
+        "message": "你答应做完工作陪我玩的。可是我看你现在看的东西跟工作没关系呀..."
     },
-    "stagnantTabNudgeTitle1": {
-        "message": "用鼻子拱你"
+    "unrelatedContentNudgeTitle5": {
+        "message": "注意力回来！"
     },
-    "stagnantTabNudgeBody1": {
-        "message": "我们盯着这个看很久了。这是工作内容吗？还是我们在做白日梦？"
-    },
-    "stagnantTabNudgeTitle2": {
-        "message": "这是哪儿呀"
-    },
-    "stagnantTabNudgeBody2": {
-        "message": "这个页面看起来很有趣，但好像跟我们的项目没关系耶。切回去吧？"
-    },
-    "stagnantTabNudgeTitle3": {
-        "message": "挠屏幕 🚪"
-    },
-    "stagnantTabNudgeBody3": {
-        "message": "放我出去！我们在这个摸鱼页面待太久了。回去干活啦！"
-    },
-    "stagnantTabNudgeTitle4": {
-        "message": "午睡时间到了？💤"
-    },
-    "stagnantTabNudgeBody4": {
-        "message": "你好像很久没操作了。如果不工作的话，带我去散步好不好？不然就专心工作嘛。"
-    },
-    "stagnantTabNudgeTitle5": {
-        "message": "哈罗？主人？🔭"
-    },
-    "stagnantTabNudgeBody5": {
-        "message": "我觉得你在网络兔洞里迷路了。抓紧我的项圈，我带你回工作区！"
+    "unrelatedContentNudgeBody5": {
+        "message": "我知道摸鱼很开心，但这个不是我们的任务哦。专心一点，早点干完早点休息！"
     },
     "imResearching": {
         "message": "没，我在查资料",

@@ -299,6 +299,7 @@ function showNudgeOverlay(data: NudgeData) {
   const overlay = shadow.querySelector('.overlay');
   const closeBtn = shadow.querySelector('#close-nudge');
   const returnBtn = shadow.querySelector('#return-btn');
+  const nudgeContent = shadow.querySelector('#nudge-content');
 
   const closeOverlay = () => {
     overlay?.classList.add('closing');
@@ -314,6 +315,12 @@ function showNudgeOverlay(data: NudgeData) {
   };
 
   closeBtn?.addEventListener('click', closeOverlay);
+
+  // Click on nudge-content to return to focus tab
+  nudgeContent?.addEventListener('click', async () => {
+    overlay?.classList.add('closing');
+    await safeSendMessage({ type: 'RETURN_TO_FOCUS_AND_CLOSE' });
+  });
 
 
   returnBtn?.addEventListener('click', async () => {

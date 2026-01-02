@@ -86,6 +86,16 @@ export const nudgeStyles = `
 
   .content {
     padding: 16px 20px;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  .content:hover {
+    transform: scale(1.02);
+  }
+
+  .content:hover .focus-reminder {
+    background: #f1f5f9;
   }
 
   .footer {

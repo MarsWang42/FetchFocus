@@ -158,65 +158,35 @@
     "doomScrollNudgeBody5": {
         "message": "Just kidding. But now that I have your attention, stop scrolling and let's focus!"
     },
-    "rapidSwitchNudgeTitle1": {
-        "message": "Whoa, slow down! 🌪️"
+    "unrelatedContentNudgeTitle1": {
+        "message": "Sniffs screen 👃"
     },
-    "rapidSwitchNudgeBody1": {
-        "message": "You're clicking faster than I can wag my tail! Let's pick one task and stick to it."
+    "unrelatedContentNudgeBody1": {
+        "message": "This doesn't smell like work content... I think we picked up the wrong scent. Let's get back on track!"
     },
-    "rapidSwitchNudgeTitle2": {
-        "message": "Sniff sniff 👃"
+    "unrelatedContentNudgeTitle2": {
+        "message": "Wrong ball! 🎾"
     },
-    "rapidSwitchNudgeBody2": {
-        "message": "I smell distraction. You're jumping around a lot. Let's find the scent of our main project again."
+    "unrelatedContentNudgeBody2": {
+        "message": "We're chasing the wrong ball! This page isn't what we're supposed to be fetching right now."
     },
-    "rapidSwitchNudgeTitle3": {
-        "message": "Browser Zoomies? ⚡"
+    "unrelatedContentNudgeTitle3": {
+        "message": "Are we lost? 🐾"
     },
-    "rapidSwitchNudgeBody3": {
-        "message": "You're running all over the place! Sit. Stay. Focus on one tab."
+    "unrelatedContentNudgeBody3": {
+        "message": "I don't recognize this place. It's far away from our goals. Follow me, I'll lead you back."
     },
-    "rapidSwitchNudgeTitle4": {
-        "message": "I'm lost! 🗺️"
+    "unrelatedContentNudgeTitle4": {
+        "message": "Whines 🥺"
     },
-    "rapidSwitchNudgeBody4": {
-        "message": "Too many tabs, too fast! Which one were we actually working on?"
+    "unrelatedContentNudgeBody4": {
+        "message": "You promised we'd finish fast so we could play! But looking at this unrelated stuff is taking forever..."
     },
-    "rapidSwitchNudgeTitle5": {
-        "message": "Barks once �"
+    "unrelatedContentNudgeTitle5": {
+        "message": "Squirrel! (Just kidding)"
     },
-    "rapidSwitchNudgeBody5": {
-        "message": "Hey! Stop flickering around. Deep breath. One thing at a time."
-    },
-    "stagnantTabNudgeTitle1": {
-        "message": "Nudges hand 🐽"
-    },
-    "stagnantTabNudgeBody1": {
-        "message": "We've been staring at this for a while. Is this related to work, or are we daydreaming?"
-    },
-    "stagnantTabNudgeTitle2": {
-        "message": "Barking up the wrong tree? 🌳"
-    },
-    "stagnantTabNudgeBody2": {
-        "message": "This page looks interesting, but it doesn't look like our project. Let's swap back."
-    },
-    "stagnantTabNudgeTitle3": {
-        "message": "Scratches screen 🚪"
-    },
-    "stagnantTabNudgeBody3": {
-        "message": "Let me out! We've been stuck on this off-topic page for ages. Back to work!"
-    },
-    "stagnantTabNudgeTitle4": {
-        "message": "Nap time? 💤"
-    },
-    "stagnantTabNudgeBody4": {
-        "message": "You haven't moved in a while. If we aren't working, can we go for a walk instead? Or just work."
-    },
-    "stagnantTabNudgeTitle5": {
-        "message": "Hello? Human? 🔭"
-    },
-    "stagnantTabNudgeBody5": {
-        "message": "I think you got lost in the internet rabbit hole. Grab my collar, I'll lead you back to work."
+    "unrelatedContentNudgeBody5": {
+        "message": "I know distractions are tempting, but this isn't the task at hand. Eyes on the prize, human!"
     },
     "imResearching": {
         "message": "I'm Researching",
