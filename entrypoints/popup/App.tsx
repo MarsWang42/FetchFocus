@@ -245,15 +245,25 @@ function App() {
     setIsStartingFocus(true);
 
     try {
-      // Add to todos if not already present
+      // Add to todos if not already present, and update keywords if exists
       const description = currentFocusDescription.trim();
       if (description) {
-        const exists = todos.some(t => t.text.toLowerCase() === description.toLowerCase());
-        if (!exists && todos.length < 10) { // Allow slightly more when auto-adding
+        const existingTodo = todos.find(t => t.text.toLowerCase() === description.toLowerCase());
+        if (existingTodo) {
+          // Update keywords for existing todo
+          if (focusKeywords.length > 0) {
+            const updatedTodos = todos.map(t =>
+              t.id === existingTodo.id ? { ...t, keywords: focusKeywords } : t
+            );
+            setTodos(updatedTodos);
+            await storage.setTodos(updatedTodos);
+          }
+        } else if (todos.length < 10) { // Allow slightly more when auto-adding
           const newTodoItem: Todo = {
             id: crypto.randomUUID(),
             text: description,
-            completed: false
+            completed: false,
+            keywords: focusKeywords.length > 0 ? focusKeywords : undefined,
           };
           const updatedTodos = [...todos, newTodoItem];
           setTodos(updatedTodos);
@@ -354,6 +364,24 @@ function App() {
   return (
     <Card className="border-0 shadow-none rounded-none min-h-[400px]">
       <CardContent className="space-y-6 pt-6">
+        {/* AI Setting - only show when AI is not enabled */}
+        {!settings.aiEnabled && (
+          <div className="flex items-center justify-between p-3 rounded-lg bg-muted-blue-50 border border-muted-blue-100">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-muted-blue-500" />
+              <div>
+                <p className="text-sm font-medium text-slate-700">
+                  {t('aiContentAnalysis')}
+                </p>
+                <p className="text-xs text-slate-500">
+                  {t('localGeminiNano')}
+                </p>
+              </div>
+            </div>
+            <Switch checked={settings.aiEnabled} onCheckedChange={handleToggleAI} disabled={isDownloading} />
+          </div>
+        )}
+
         {/* Focus Session Section */}
         <div className="space-y-3">
           <h4 className="text-base font-semibold text-slate-800 flex items-center justify-center gap-2 mb-1">
@@ -433,6 +461,10 @@ function App() {
                               className="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-amber-50 hover:text-amber-900 transition-colors border-b border-slate-100 last:border-0"
                               onClick={() => {
                                 setCurrentFocusDescription(todo.text);
+                                // Auto-fill saved keywords from the todo
+                                if (todo.keywords && todo.keywords.length > 0) {
+                                  setFocusKeywords(todo.keywords);
+                                }
                               }}
                             >
                               {todo.text}
@@ -635,24 +667,6 @@ function App() {
             </Button>
           </div>
         </div>
-
-        {/* AI Setting - only show when AI is not enabled */}
-        {!settings.aiEnabled && (
-          <div className="flex items-center justify-between p-3 rounded-lg bg-muted-blue-50 border border-muted-blue-100">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-muted-blue-500" />
-              <div>
-                <p className="text-sm font-medium text-slate-700">
-                  {t('aiContentAnalysis')}
-                </p>
-                <p className="text-xs text-slate-500">
-                  {t('localGeminiNano')}
-                </p>
-              </div>
-            </div>
-            <Switch checked={settings.aiEnabled} onCheckedChange={handleToggleAI} disabled={isDownloading} />
-          </div>
-        )}
 
         {/* Settings Button */}
         <button

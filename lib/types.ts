@@ -2,6 +2,7 @@ export interface Todo {
     id: string;
     text: string;
     completed: boolean;
+    keywords?: string[]; // Keywords used with this todo during focus sessions
 }
 
 export interface Settings {
