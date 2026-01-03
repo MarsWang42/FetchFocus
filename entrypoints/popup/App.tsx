@@ -482,12 +482,16 @@ function App() {
                   </div>
                   {/* Current Tab Indicator */}
                   {currentTab && (
-                    <div className={`flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 transition-opacity ${!includeCurrentTab ? 'opacity-60' : ''}`}>
+                    <div
+                      className={`flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 transition-opacity cursor-pointer ${!includeCurrentTab ? 'opacity-60' : ''}`}
+                      onClick={() => setIncludeCurrentTab(!includeCurrentTab)}
+                    >
                       <div title={t('includeCurrentTab')}>
                         <Checkbox
                           checked={includeCurrentTab}
                           onCheckedChange={(checked) => setIncludeCurrentTab(checked === true)}
                           className="h-4 w-4"
+                          onClick={(e) => e.stopPropagation()}
                         />
                       </div>
                       <span className="text-xs text-slate-400 shrink-0">{t('withTab')}</span>

@@ -248,6 +248,7 @@ async function triggerFocusContextCheck() {
 
   if (settings.aiEnabled) {
     try {
+      const startTime = performance.now();
       const currentContent = await getTabSummary(currentActiveTabId);
       const locale = browser.i18n.getUILanguage();
       const result = await checkContentSimilarity(
@@ -257,6 +258,8 @@ async function triggerFocusContextCheck() {
         currentTab.url || '',
         locale
       );
+      const endTime = performance.now();
+      console.log(`[FetchFocus] Context check took ${(endTime - startTime).toFixed(2)}ms (getTabSummary + checkContentSimilarity)`);
       isDrifted = result.isDrifted;
       reason = result.reason || '';
     } catch (e) {
