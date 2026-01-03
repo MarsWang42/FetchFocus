@@ -108,9 +108,9 @@ export const storage = {
             }
         }
 
-        // Sort by count (descending), keep top 10
+        // Sort by count (descending), keep top 50
         history.sort((a, b) => b.count - a.count);
-        const trimmed = history.slice(0, 10);
+        const trimmed = history.slice(0, 50);
 
         await browser.storage.local.set({ [STORAGE_KEYS.KEYWORD_HISTORY]: trimmed });
     },

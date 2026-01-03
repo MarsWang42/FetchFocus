@@ -538,14 +538,14 @@ function App() {
                         onChange={async (e) => {
                           setKeywordInput(e.target.value);
                           // Load suggestions based on input
-                          const suggestions = await storage.getKeywordSuggestions(e.target.value);
+                          const suggestions = await storage.getKeywordSuggestions(e.target.value, 5);
                           // Filter out already selected keywords
                           setKeywordSuggestions(suggestions.filter(s => !focusKeywords.includes(s)));
                         }}
                         onFocus={async () => {
                           setShowKeywordSuggestions(true);
                           // Load initial suggestions
-                          const suggestions = await storage.getKeywordSuggestions(keywordInput);
+                          const suggestions = await storage.getKeywordSuggestions(keywordInput, 5);
                           setKeywordSuggestions(suggestions.filter(s => !focusKeywords.includes(s)));
                         }}
                         onBlur={() => setTimeout(() => setShowKeywordSuggestions(false), 150)}
