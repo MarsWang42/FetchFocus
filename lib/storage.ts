@@ -1,5 +1,5 @@
 import { browser } from 'wxt/browser';
-import type { Todo, Settings, FocusSession, KeywordEntry, URLVisit, BlacklistEntry, WhitelistEntry, CompletedTask } from './types';
+import type { Todo, Settings, FocusSession, KeywordEntry, URLVisit, BlacklistEntry, WhitelistEntry, CompletedTask, TodoCategory } from './types';
 import { DEFAULT_SETTINGS, STORAGE_KEYS } from './constants';
 
 
@@ -316,5 +316,33 @@ export const storage = {
         const list = await this.getBypassedTabs();
         const filtered = list.filter(e => e.tabId !== tabId);
         await browser.storage.local.set({ [STORAGE_KEYS.BYPASSED_TABS]: filtered });
+    },
+
+
+    // Todo Categories
+    async getCategories(): Promise<TodoCategory[]> {
+        const result = await browser.storage.local.get(STORAGE_KEYS.TODO_CATEGORIES);
+        return (result[STORAGE_KEYS.TODO_CATEGORIES] as TodoCategory[]) || [];
+    },
+
+    async addCategory(category: TodoCategory): Promise<void> {
+        const list = await this.getCategories();
+        list.push(category);
+        await browser.storage.local.set({ [STORAGE_KEYS.TODO_CATEGORIES]: list });
+    },
+
+    async updateCategory(id: string, updates: Partial<Omit<TodoCategory, 'id' | 'createdAt'>>): Promise<void> {
+        const list = await this.getCategories();
+        const index = list.findIndex(c => c.id === id);
+        if (index !== -1) {
+            list[index] = { ...list[index], ...updates };
+            await browser.storage.local.set({ [STORAGE_KEYS.TODO_CATEGORIES]: list });
+        }
+    },
+
+    async removeCategory(id: string): Promise<void> {
+        const list = await this.getCategories();
+        const filtered = list.filter(c => c.id !== id);
+        await browser.storage.local.set({ [STORAGE_KEYS.TODO_CATEGORIES]: filtered });
     },
 };

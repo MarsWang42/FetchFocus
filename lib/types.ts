@@ -81,3 +81,10 @@ export interface CompletedTask {
     completedAt: number; // timestamp
     focusDurationMs?: number; // how long the focus session lasted
 }
+
+export interface TodoCategory {
+    id: string;
+    name: string;
+    keywords: string[];
+    createdAt: number;
+}

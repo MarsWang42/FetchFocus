@@ -20,4 +20,5 @@ export const STORAGE_KEYS = {
     WHITELIST: 'mindful_nudge_whitelist',
     COMPLETED_TASKS: 'mindful_nudge_completed_tasks',
     BYPASSED_TABS: 'mindful_nudge_bypassed_tabs', // Tabs that bypassed blacklist warning
+    TODO_CATEGORIES: 'mindful_nudge_todo_categories',
 } as const;

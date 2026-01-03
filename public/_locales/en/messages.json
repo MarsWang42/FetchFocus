@@ -329,5 +329,26 @@
     "focusTabAwayReason": {
         "message": "You've been away from your focus tab for 10 minutes.",
         "description": "Reason shown when user hasn't visited focus tab in 10 minutes"
+    },
+    "categories": {
+        "message": "Categories"
+    },
+    "categoriesDescription": {
+        "message": "Create categories with predefined keywords. When starting a focus session, select a category to quickly add its keywords."
+    },
+    "categoriesExample": {
+        "message": "Example: 'Work' with keywords: project, deadline, meeting"
+    },
+    "categoryNamePlaceholder": {
+        "message": "Category name..."
+    },
+    "categoryKeywordsPlaceholder": {
+        "message": "Add keywords (press Enter)..."
+    },
+    "addCategory": {
+        "message": "Add Category"
+    },
+    "noCategoriesYet": {
+        "message": "No categories yet"
     }
 }

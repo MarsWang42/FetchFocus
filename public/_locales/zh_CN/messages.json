@@ -329,5 +329,26 @@
     "focusTabAwayReason": {
         "message": "你已经离开专注页面10分钟了。",
         "description": "Reason shown when user hasn't visited focus tab in 10 minutes"
+    },
+    "categories": {
+        "message": "分类"
+    },
+    "categoriesDescription": {
+        "message": "创建带有预设关键词的分类。开始专注时，选择分类可快速添加对应的关键词。"
+    },
+    "categoriesExample": {
+        "message": "例如：'写代码' 分类包含关键词： 代码、编程、开发、任务"
+    },
+    "categoryNamePlaceholder": {
+        "message": "分类名称..."
+    },
+    "categoryKeywordsPlaceholder": {
+        "message": "添加关键词（按回车）..."
+    },
+    "addCategory": {
+        "message": "添加分类"
+    },
+    "noCategoriesYet": {
+        "message": "还没有分类"
     }
 }

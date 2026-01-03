@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Checkbox } from '@/components/ui/checkbox';
 import { storage } from '@/lib/storage';
-import type { Todo, Settings, FocusSession } from '@/lib/types';
+import type { Todo, Settings, FocusSession, TodoCategory } from '@/lib/types';
 import { DEFAULT_SETTINGS } from '@/lib/constants';
 import { Progress } from '@/components/ui/progress';
 
@@ -38,19 +38,22 @@ function App() {
   const [elapsedTime, setElapsedTime] = useState<string>('');
   const [completedTodayCount, setCompletedTodayCount] = useState(0);
   const [includeCurrentTab, setIncludeCurrentTab] = useState(false);
+  const [categories, setCategories] = useState<TodoCategory[]>([]);
 
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [loadedTodos, loadedSettings, loadedCurrentFocus] = await Promise.all([
+        const [loadedTodos, loadedSettings, loadedCurrentFocus, loadedCategories] = await Promise.all([
           storage.getTodos(),
           storage.getSettings(),
           storage.getCurrentFocus(),
+          storage.getCategories(),
         ]);
         setTodos(loadedTodos.filter(t => !t.completed));
         setSettings(loadedSettings);
         setCurrentFocus(loadedCurrentFocus);
+        setCategories(loadedCategories);
 
         // Load today's completed count
         const today = new Date();
@@ -510,6 +513,30 @@ function App() {
                       >
                         {currentTab.title}
                       </span>
+                    </div>
+                  )}
+
+                  {/* Category Quick Select */}
+                  {categories.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {categories.map((category) => (
+                        <button
+                          key={category.id}
+                          type="button"
+                          onClick={() => {
+                            // Merge category keywords with existing (avoid duplicates)
+                            const merged = [...focusKeywords];
+                            category.keywords.forEach(k => {
+                              if (!merged.includes(k)) merged.push(k);
+                            });
+                            setFocusKeywords(merged);
+                          }}
+                          className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-purple-50 text-purple-700 hover:bg-purple-100 rounded-full transition-colors cursor-pointer border border-purple-200"
+                        >
+                          <span>{category.name}</span>
+                          <span className="text-purple-400">+{category.keywords.length}</span>
+                        </button>
+                      ))}
                     </div>
                   )}
 
