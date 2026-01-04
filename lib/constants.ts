@@ -4,7 +4,7 @@ export const DEFAULT_SETTINGS: Settings = {
     aiEnabled: false,
 };
 
-export const NUDGE_COOLDOWN = 30000; // 30 seconds between nudges
+export const NUDGE_COOLDOWN = 15000; // 15 seconds between nudges
 export const TAB_SWITCH_THRESHOLD = 10; // 10 unique tabs
 export const TAB_SWITCH_WINDOW = 60000; // 1 minute window
 
