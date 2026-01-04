@@ -3,18 +3,24 @@ import { browser } from 'wxt/browser';
 const t = (key: string) => browser.i18n.getMessage(key as any) || key;
 
 export function showBlacklistWarning(
-    onProceed: () => void,
-    onGoBack: () => void
+  onProceed: () => void,
+  onGoBack: () => void
 ): void {
-    // Get domain and favicon for display
-    const domain = window.location.hostname;
-    const favicon = document.querySelector<HTMLLinkElement>('link[rel*="icon"]')?.href
-        || `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+  // Prevent duplicate warnings
+  if (document.getElementById('fetch-focus-blacklist-overlay')) {
+    console.debug('[FetchFocus] Blacklist warning already visible, skipping');
+    return;
+  }
 
-    const overlay = document.createElement('div');
-    overlay.id = 'fetch-focus-blacklist-overlay';
+  // Get domain and favicon for display
+  const domain = window.location.hostname;
+  const favicon = document.querySelector<HTMLLinkElement>('link[rel*="icon"]')?.href
+    || `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
 
-    const styles = `
+  const overlay = document.createElement('div');
+  overlay.id = 'fetch-focus-blacklist-overlay';
+
+  const styles = `
     .ff-blacklist-overlay {
       position: fixed;
       inset: 0;
@@ -131,7 +137,7 @@ export function showBlacklistWarning(
     }
   `;
 
-    const html = `
+  const html = `
     <div class="ff-blacklist-overlay">
       <div class="ff-blacklist-container">
         <img src="${browser.runtime.getURL('/running_puppy.png')}" alt="FetchFocus" class="ff-blacklist-avatar" />
@@ -150,22 +156,22 @@ export function showBlacklistWarning(
     </div>
   `;
 
-    const shadow = overlay.attachShadow({ mode: 'closed' });
-    shadow.innerHTML = `<style>${styles}</style>${html}`;
+  const shadow = overlay.attachShadow({ mode: 'closed' });
+  shadow.innerHTML = `<style>${styles}</style>${html}`;
 
-    document.body.appendChild(overlay);
+  document.body.appendChild(overlay);
 
-    // Event handlers
-    const goBackBtn = shadow.querySelector('#ff-goback');
-    const proceedBtn = shadow.querySelector('#ff-proceed');
+  // Event handlers
+  const goBackBtn = shadow.querySelector('#ff-goback');
+  const proceedBtn = shadow.querySelector('#ff-proceed');
 
-    goBackBtn?.addEventListener('click', () => {
-        overlay.remove();
-        onGoBack();
-    });
+  goBackBtn?.addEventListener('click', () => {
+    overlay.remove();
+    onGoBack();
+  });
 
-    proceedBtn?.addEventListener('click', () => {
-        overlay.remove();
-        onProceed();
-    });
+  proceedBtn?.addEventListener('click', () => {
+    overlay.remove();
+    onProceed();
+  });
 }

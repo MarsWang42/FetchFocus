@@ -335,9 +335,12 @@ function App() {
       );
 
       if (matchingTodo) {
-        const updatedTodos = todos.map((t) =>
-          t.id === matchingTodo.id ? { ...t, completed: true } : t
-        );
+        // Record as completed task for the calendar (same as handleToggleTodo)
+        await storage.recordCompletedTask(matchingTodo.text);
+        setCompletedTodayCount(prev => prev + 1);
+
+        // Remove from todos list (same as handleToggleTodo)
+        const updatedTodos = todos.filter(t => t.id !== matchingTodo.id);
         setTodos(updatedTodos);
         await storage.setTodos(updatedTodos);
       }
