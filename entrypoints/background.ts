@@ -237,9 +237,13 @@ async function triggerFocusContextCheck() {
   const currentFocus = await storage.getCurrentFocus();
   if (!currentFocus || currentActiveTabId === null) return;
 
+  // Capture the tab ID at the start so we send the nudge to the correct tab
+  // even if user switches tabs during the async AI analysis
+  const triggeredTabId = currentActiveTabId;
+
   console.debug('[FetchFocus] Triggering context check');
 
-  const currentTab = await browser.tabs.get(currentActiveTabId);
+  const currentTab = await browser.tabs.get(triggeredTabId);
   if (!currentTab) return;
 
   const settings = await storage.getSettings();
@@ -268,8 +272,8 @@ async function triggerFocusContextCheck() {
   }
 
   if (isDrifted) {
-    console.debug('[FetchFocus] Sending nudge to tab:', currentActiveTabId);
-    const sent = await sendMessageToContentScript(currentActiveTabId, {
+    console.debug('[FetchFocus] Sending nudge to tab:', triggeredTabId);
+    const sent = await sendMessageToContentScript(triggeredTabId, {
       type: 'SHOW_FOCUS_NUDGE',
       focusTitle: currentFocus.pageTitle || currentFocus.description || 'Focus Session',
       focusUrl: currentFocus.pageUrl || '',
