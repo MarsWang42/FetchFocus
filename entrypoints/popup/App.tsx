@@ -497,7 +497,6 @@ function App() {
                           checked={includeCurrentTab}
                           onCheckedChange={(checked) => setIncludeCurrentTab(checked === true)}
                           className="h-4 w-4"
-                          onClick={(e) => e.stopPropagation()}
                         />
                       </div>
                       <span className="text-xs text-slate-400 shrink-0">{t('withTab')}</span>
