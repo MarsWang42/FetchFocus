@@ -350,5 +350,25 @@
     },
     "noCategoriesYet": {
         "message": "No categories yet"
+    },
+    "downloadingModels": {
+        "message": "Downloading AI models",
+        "description": "Shown while AI models are being downloaded"
+    },
+    "downloadingLanguageModel": {
+        "message": "Downloading Language Model",
+        "description": "Shown while the Language Model is being downloaded"
+    },
+    "downloadingSummarizer": {
+        "message": "Downloading Summarizer",
+        "description": "Shown while the Summarizer model is being downloaded"
+    },
+    "downloadingBothModels": {
+        "message": "Downloading Language Model & Summarizer",
+        "description": "Shown while both AI models are being downloaded in parallel"
+    },
+    "cancelDownload": {
+        "message": "Cancel",
+        "description": "Button to cancel the AI model download"
     }
 }

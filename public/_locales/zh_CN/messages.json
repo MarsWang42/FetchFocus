@@ -350,5 +350,25 @@
     },
     "noCategoriesYet": {
         "message": "还没有分类"
+    },
+    "downloadingModels": {
+        "message": "正在下载 AI 模型",
+        "description": "Shown while AI models are being downloaded"
+    },
+    "downloadingLanguageModel": {
+        "message": "正在下载语言模型",
+        "description": "Shown while the Language Model is being downloaded"
+    },
+    "downloadingSummarizer": {
+        "message": "正在下载摘要模型",
+        "description": "Shown while the Summarizer model is being downloaded"
+    },
+    "downloadingBothModels": {
+        "message": "正在下载语言模型和摘要模型",
+        "description": "Shown while both AI models are being downloaded in parallel"
+    },
+    "cancelDownload": {
+        "message": "取消",
+        "description": "Button to cancel the AI model download"
     }
 }

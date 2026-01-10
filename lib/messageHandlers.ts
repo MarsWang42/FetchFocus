@@ -1,8 +1,17 @@
 import { browser } from 'wxt/browser';
 import { storage } from '@/lib/storage';
-import type { FocusSession } from '@/lib/types';
+import type { FocusSession, AIDownloadState } from '@/lib/types';
 import { setIconState } from './iconManager';
 import { getTabSummary } from './aiService';
+
+// Module-level state for AI download
+let aiDownloadState: AIDownloadState = {
+    isDownloading: false,
+    progress: 0,
+};
+
+// AbortController for cancelling downloads
+let downloadAbortController: AbortController | null = null;
 
 /**
  * Context passed to message handlers
@@ -380,6 +389,172 @@ export async function handleCompleteFocus(): Promise<MessageResponse> {
     return { success: true };
 }
 
+// Helper functions for AI availability status checks
+const isModelAvailable = (status: string) => status === 'available' || status === 'ready';
+const isModelDownloadable = (status: string) => status === 'downloadable' || status === 'after-download';
+const isModelDownloading = (status: string) => status === 'downloading';
+
+
+/**
+ * Runs model downloads/monitoring asynchronously and enables AI when complete
+ * Downloads models in parallel for faster completion
+ */
+async function runModelDownloads(needsLm: boolean, needsSum: boolean): Promise<void> {
+    try {
+        const LanguageModel = (globalThis as any).LanguageModel;
+        const Summarizer = (globalThis as any).Summarizer;
+
+        // Track progress for each model separately for parallel downloads
+        const progressMap = {
+            lm: 0,
+            sum: 0,
+        };
+        const totalTasks = (needsLm ? 1 : 0) + (needsSum ? 1 : 0);
+
+        // Determine which model(s) we're downloading
+        const currentModel: 'language-model' | 'summarizer' | 'both' =
+            needsLm && needsSum ? 'both' : needsLm ? 'language-model' : 'summarizer';
+        aiDownloadState = { isDownloading: true, progress: 0, currentModel };
+
+        const updateTotalProgress = () => {
+            const lmProgress = needsLm ? progressMap.lm : 0;
+            const sumProgress = needsSum ? progressMap.sum : 0;
+            aiDownloadState.progress = (lmProgress + sumProgress) / totalTasks;
+        };
+
+        const downloadPromises: Promise<void>[] = [];
+
+        if (needsLm) {
+            downloadPromises.push(
+                LanguageModel.create({
+                    signal: downloadAbortController?.signal,
+                    monitor(m: any) {
+                        m.addEventListener('downloadprogress', (e: any) => {
+                            progressMap.lm = (e.loaded / e.total) * 100;
+                            updateTotalProgress();
+                        });
+                    }
+                }).then(() => {
+                    progressMap.lm = 100;
+                    updateTotalProgress();
+                })
+            );
+        }
+
+        if (needsSum) {
+            downloadPromises.push(
+                Summarizer.create({
+                    signal: downloadAbortController?.signal,
+                    monitor(m: any) {
+                        m.addEventListener('downloadprogress', (e: any) => {
+                            progressMap.sum = (e.loaded / e.total) * 100;
+                            updateTotalProgress();
+                        });
+                    }
+                }).then(() => {
+                    progressMap.sum = 100;
+                    updateTotalProgress();
+                })
+            );
+        }
+
+        // Download all models in parallel
+        await Promise.all(downloadPromises);
+
+        aiDownloadState = { isDownloading: false, progress: 100 };
+        downloadAbortController = null;
+        const settings = await storage.getSettings();
+        await storage.setSettings({ ...settings, aiEnabled: true });
+        console.debug('[FetchFocus] AI models download completed');
+    } catch (error: any) {
+        if (error?.name === 'AbortError') {
+            console.debug('[FetchFocus] AI download cancelled by user');
+            aiDownloadState = { isDownloading: false, progress: 0 };
+        } else {
+            console.error('[FetchFocus] Error during AI download', error);
+            aiDownloadState = { isDownloading: false, progress: 0, error: 'Failed to download AI models' };
+        }
+        downloadAbortController = null;
+    }
+}
+
+/**
+ * Handle ENABLE_AI message - download models in background
+ */
+export async function handleEnableAI(): Promise<MessageResponse> {
+    // If already downloading, just return current state
+    if (aiDownloadState.isDownloading) {
+        return { success: true, ...aiDownloadState };
+    }
+
+    try {
+        aiDownloadState = { isDownloading: false, progress: 0, error: undefined };
+
+        // Check availability using globalThis (available in service worker context)
+        const LanguageModel = (globalThis as any).LanguageModel;
+        const Summarizer = (globalThis as any).Summarizer;
+
+        const [lmAvailability, sumAvailability] = await Promise.all([
+            LanguageModel?.availability?.() ?? 'unavailable',
+            Summarizer?.availability?.() ?? 'unavailable',
+        ]);
+
+        const lmAvailable = isModelAvailable(lmAvailability);
+        const sumAvailable = isModelAvailable(sumAvailability);
+
+        // Both models are already available
+        if (lmAvailable && sumAvailable) {
+            const settings = await storage.getSettings();
+            await storage.setSettings({ ...settings, aiEnabled: true });
+            return { success: true, isDownloading: false, progress: 100 };
+        }
+
+        // Check if models need downloading or are already downloading
+        const lmNeedsDownload = isModelDownloading(lmAvailability) || isModelDownloadable(lmAvailability);
+        const sumNeedsDownload = isModelDownloading(sumAvailability) || isModelDownloadable(sumAvailability);
+
+        if (lmNeedsDownload || sumNeedsDownload) {
+            const currentModel: 'language-model' | 'summarizer' | 'both' =
+                lmNeedsDownload && sumNeedsDownload ? 'both' : lmNeedsDownload ? 'language-model' : 'summarizer';
+            aiDownloadState = { isDownloading: true, progress: 0, currentModel };
+            downloadAbortController = new AbortController();
+            runModelDownloads(lmNeedsDownload, sumNeedsDownload);
+            return { success: true, ...aiDownloadState };
+        }
+
+        // Models are unavailable
+        return {
+            success: false,
+            error: 'AI models unavailable. Please enable the required Chrome flags.',
+        };
+    } catch (error) {
+        console.error('[FetchFocus] Error checking/enabling AI', error);
+        aiDownloadState = { isDownloading: false, progress: 0, error: 'An error occurred' };
+        return { success: false, ...aiDownloadState };
+    }
+}
+
+/**
+ * Handle GET_AI_DOWNLOAD_STATUS message
+ */
+export async function handleGetAIDownloadStatus(): Promise<MessageResponse> {
+    return { ...aiDownloadState };
+}
+
+/**
+ * Handle CANCEL_AI_DOWNLOAD message
+ */
+export async function handleCancelAIDownload(): Promise<MessageResponse> {
+    if (downloadAbortController) {
+        downloadAbortController.abort();
+        downloadAbortController = null;
+        aiDownloadState = { isDownloading: false, progress: 0 };
+        console.debug('[FetchFocus] AI download cancelled');
+        return { success: true, cancelled: true };
+    }
+    return { success: false, error: 'No download in progress' };
+}
+
 /**
  * Route messages to appropriate handlers
  */
@@ -420,6 +595,12 @@ export async function routeMessage(
             return handleBypassBlacklist(message, ctx);
         case 'COMPLETE_FOCUS':
             return handleCompleteFocus();
+        case 'ENABLE_AI':
+            return handleEnableAI();
+        case 'GET_AI_DOWNLOAD_STATUS':
+            return handleGetAIDownloadStatus();
+        case 'CANCEL_AI_DOWNLOAD':
+            return handleCancelAIDownload();
         default:
             return { error: 'unknown_message_type' };
     }

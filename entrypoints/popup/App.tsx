@@ -33,6 +33,7 @@ function App() {
   const [currentTab, setCurrentTab] = useState<{ id: number; windowId: number; title: string; url: string; faviconUrl?: string } | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
+  const [currentDownloadModel, setCurrentDownloadModel] = useState<'language-model' | 'summarizer' | 'both' | null>(null);
   const [aiError, setAiError] = useState<string | null>(null);
   const [isStartingFocus, setIsStartingFocus] = useState(false);
   const [elapsedTime, setElapsedTime] = useState<string>('');
@@ -54,6 +55,18 @@ function App() {
         setSettings(loadedSettings);
         setCurrentFocus(loadedCurrentFocus);
         setCategories(loadedCategories);
+
+        // Check if AI download is in progress
+        try {
+          const downloadStatus = await browser.runtime.sendMessage({ type: 'GET_AI_DOWNLOAD_STATUS' });
+          if (downloadStatus?.isDownloading) {
+            setIsDownloading(true);
+            setDownloadProgress(downloadStatus.progress || 0);
+            setCurrentDownloadModel(downloadStatus.currentModel || null);
+          }
+        } catch (e) {
+          // Ignore errors if background script not ready
+        }
 
         // Load today's completed count
         const today = new Date();
@@ -176,71 +189,69 @@ function App() {
         const updatedSettings = { ...settings, aiEnabled: false };
         setSettings(updatedSettings);
         setAiError(null);
+        setIsDownloading(false);
         await storage.setSettings(updatedSettings);
         return;
       }
 
       try {
         setAiError(null);
-        // turning on - check availability
-        const [lmAvailability, sumAvailability] = await Promise.all([
-          (window as any).LanguageModel?.availability(),
-          (window as any).Summarizer?.availability(),
-        ]);
+        // Send message to background to enable AI
+        const response = await browser.runtime.sendMessage({ type: 'ENABLE_AI' });
 
-        const isAvailable = (status: string) => status === 'available' || status === 'read';
-        const isDownloadable = (status: string) => status === 'downloadable' || status === 'after-download';
+        if (response?.error) {
+          setAiError(response.error);
+          return;
+        }
 
-        if (isAvailable(lmAvailability) && isAvailable(sumAvailability)) {
-          // Both available, just enable
-          const updatedSettings = { ...settings, aiEnabled: true };
-          setSettings(updatedSettings);
-          await storage.setSettings(updatedSettings);
-        } else if (isDownloadable(lmAvailability) || isDownloadable(sumAvailability)) {
-          // Need to download
+        if (response?.isDownloading) {
           setIsDownloading(true);
-          setDownloadProgress(0);
-
-          // Estimate total progress based on needed downloads
-          const needsLm = isDownloadable(lmAvailability);
-          const needsSum = isDownloadable(sumAvailability);
-          const totalTasks = (needsLm ? 1 : 0) + (needsSum ? 1 : 0);
-          let completedTasks = 0;
-
-          const downloadModel = async (ModelClass: any) => {
-            await ModelClass.create({
-              monitor(m: any) {
-                m.addEventListener('downloadprogress', (e: any) => {
-                  const currentTaskProgress = (e.loaded / e.total) * 100;
-                  // simplistic progress aggregation
-                  const totalProgress = ((completedTasks * 100) + currentTaskProgress) / totalTasks;
-                  setDownloadProgress(totalProgress);
-                });
-              }
-            });
-            completedTasks++;
-          };
-
-          if (needsLm) await downloadModel((window as any).LanguageModel);
-          if (needsSum) await downloadModel((window as any).Summarizer);
-
-          // Done downloading
-          setIsDownloading(false);
+          setDownloadProgress(response.progress || 0);
+          setCurrentDownloadModel(response.currentModel || null);
+        } else if (response?.success) {
+          // Already available, update UI
           const updatedSettings = { ...settings, aiEnabled: true };
           setSettings(updatedSettings);
-          await storage.setSettings(updatedSettings);
-        } else {
-          // Unavailable
-          setAiError("AI models unavailable. Please enable the following flags:");
         }
       } catch (error) {
-        console.error('Error checking/downloading AI models', error);
-        setAiError("An error occurred while checking AI availability.");
-        setIsDownloading(false);
+        console.error('Error enabling AI', error);
+        setAiError("An error occurred while enabling AI.");
       }
     },
     [settings]
   );
+
+  // Poll for AI download status when downloading
+  useEffect(() => {
+    if (!isDownloading) return;
+
+    const pollStatus = async () => {
+      try {
+        const response = await browser.runtime.sendMessage({ type: 'GET_AI_DOWNLOAD_STATUS' });
+
+        if (response?.error) {
+          setAiError(response.error);
+          setIsDownloading(false);
+          return;
+        }
+
+        setDownloadProgress(response.progress || 0);
+        setCurrentDownloadModel(response.currentModel || null);
+
+        if (!response.isDownloading) {
+          setIsDownloading(false);
+          // Reload settings to get updated aiEnabled state
+          const loadedSettings = await storage.getSettings();
+          setSettings(loadedSettings);
+        }
+      } catch (error) {
+        console.error('Error polling AI download status', error);
+      }
+    };
+
+    const interval = setInterval(pollStatus, 200);
+    return () => clearInterval(interval);
+  }, [isDownloading]);
 
 
   const handleStartFocus = useCallback(async () => {
@@ -385,6 +396,65 @@ function App() {
               </div>
             </div>
             <Switch checked={settings.aiEnabled} onCheckedChange={handleToggleAI} disabled={isDownloading} />
+          </div>
+        )}
+
+        {isDownloading && (
+          <div className="space-y-1">
+            <div className="flex justify-between items-center text-xs text-slate-500">
+              <span>
+                {currentDownloadModel === 'both'
+                  ? t('downloadingBothModels')
+                  : currentDownloadModel === 'language-model'
+                    ? t('downloadingLanguageModel')
+                    : currentDownloadModel === 'summarizer'
+                      ? t('downloadingSummarizer')
+                      : t('downloadingModels')}
+                ...
+              </span>
+              <div className="flex items-center gap-2">
+                <span>{Math.round(downloadProgress)}%</span>
+                <button
+                  onClick={async () => {
+                    await browser.runtime.sendMessage({ type: 'CANCEL_AI_DOWNLOAD' });
+                    setIsDownloading(false);
+                    setDownloadProgress(0);
+                    setCurrentDownloadModel(null);
+                  }}
+                  className="text-rose-400 hover:text-rose-600 font-medium cursor-pointer"
+                >
+                  {t('cancelDownload')}
+                </button>
+              </div>
+            </div>
+            <Progress value={downloadProgress} className="h-1" />
+          </div>
+        )}
+
+        {aiError && (
+          <div className="p-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded break-words">
+            <p>{aiError}</p>
+            {aiError.includes("Please enable") && (
+              <>
+                <ul className="list-disc pl-4 mt-2 space-y-1">
+                  {[
+                    "chrome://flags/#prompt-api-for-gemini-nano",
+                    "chrome://flags/#prompt-api-for-gemini-nano-multimodal-input",
+                    "chrome://flags/#summarization-api-for-gemini-nano"
+                  ].map(url => (
+                    <li key={url}>
+                      <button
+                        className="text-left underline hover:text-red-800 font-medium cursor-pointer"
+                        onClick={() => browser.tabs.create({ url })}
+                      >
+                        {url}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-2 font-medium">{t('relaunchChromeNote')}</p>
+              </>
+            )}
           </div>
         )}
 
@@ -710,42 +780,6 @@ function App() {
           <span className="text-sm font-medium">{t('settingsTitle')}</span>
         </button>
 
-        {isDownloading && (
-          <div className="space-y-1">
-            <div className="flex justify-between text-xs text-slate-500">
-              <span>{t('downloadingModels')}...</span>
-              <span>{Math.round(downloadProgress)}%</span>
-            </div>
-            <Progress value={downloadProgress} className="h-1" />
-          </div>
-        )}
-
-        {aiError && (
-          <div className="mt-2 p-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded break-words">
-            <p>{aiError}</p>
-            {aiError.includes("Please enable") && (
-              <>
-                <ul className="list-disc pl-4 mt-2 space-y-1">
-                  {[
-                    "chrome://flags/#prompt-api-for-gemini-nano",
-                    "chrome://flags/#prompt-api-for-gemini-nano-multimodal-input",
-                    "chrome://flags/#summarization-api-for-gemini-nano"
-                  ].map(url => (
-                    <li key={url}>
-                      <button
-                        className="text-left underline hover:text-red-800 font-medium cursor-pointer"
-                        onClick={() => browser.tabs.create({ url })}
-                      >
-                        {url}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-2 font-medium">{t('relaunchChromeNote')}</p>
-              </>
-            )}
-          </div>
-        )}
       </CardContent>
     </Card >
   );

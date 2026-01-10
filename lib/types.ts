@@ -88,3 +88,10 @@ export interface TodoCategory {
     keywords: string[];
     createdAt: number;
 }
+
+export interface AIDownloadState {
+    isDownloading: boolean;
+    progress: number; // 0-100
+    currentModel?: 'language-model' | 'summarizer' | 'both'; // Which model(s) are currently downloading
+    error?: string;
+}

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
     handleNudgeDismissed,
     handleGetTodos,
@@ -7,42 +7,37 @@ import {
     routeMessage,
     type MessageContext,
 } from '../messageHandlers';
+import { storage } from '@/lib/storage';
 
-// Create mock functions
-const mockStorage = {
-    getLastNudge: vi.fn().mockResolvedValue(0),
-    setLastNudge: vi.fn().mockResolvedValue(undefined),
-    getTodos: vi.fn().mockResolvedValue([]),
-    setTodos: vi.fn().mockResolvedValue(undefined),
-    getCurrentFocus: vi.fn().mockResolvedValue(null),
-    setCurrentFocus: vi.fn().mockResolvedValue(undefined),
-    getSettings: vi.fn().mockResolvedValue({ aiEnabled: false }),
-    addKeywords: vi.fn().mockResolvedValue(undefined),
-    clearRecentURLs: vi.fn().mockResolvedValue(undefined),
-    clearCheckedUrls: vi.fn().mockResolvedValue(undefined),
-    isBlacklisted: vi.fn().mockResolvedValue(false),
-    isWhitelisted: vi.fn().mockResolvedValue(false),
-    isTabBypassed: vi.fn().mockResolvedValue(false),
-    addBypassedTab: vi.fn().mockResolvedValue(undefined),
-    recordCompletedTask: vi.fn().mockResolvedValue(undefined),
-};
-
-// Mock storage
 vi.mock('@/lib/storage', () => ({
-    storage: mockStorage,
+    storage: {
+        getLastNudge: vi.fn().mockResolvedValue(0),
+        setLastNudge: vi.fn().mockResolvedValue(undefined),
+        getTodos: vi.fn().mockResolvedValue([]),
+        setTodos: vi.fn().mockResolvedValue(undefined),
+        getCurrentFocus: vi.fn().mockResolvedValue(null),
+        setCurrentFocus: vi.fn().mockResolvedValue(undefined),
+        getSettings: vi.fn().mockResolvedValue({ aiEnabled: false }),
+        setSettings: vi.fn().mockResolvedValue(undefined),
+        addKeywords: vi.fn().mockResolvedValue(undefined),
+        clearRecentURLs: vi.fn().mockResolvedValue(undefined),
+        clearCheckedUrls: vi.fn().mockResolvedValue(undefined),
+        isBlacklisted: vi.fn().mockResolvedValue(false),
+        isWhitelisted: vi.fn().mockResolvedValue(false),
+        isTabBypassed: vi.fn().mockResolvedValue(false),
+        addBypassedTab: vi.fn().mockResolvedValue(undefined),
+        recordCompletedTask: vi.fn().mockResolvedValue(undefined),
+    },
 }));
 
-// Mock iconManager
 vi.mock('@/lib/iconManager', () => ({
     setIconState: vi.fn().mockResolvedValue(undefined),
 }));
 
-// Mock aiService
 vi.mock('@/lib/aiService', () => ({
     getTabSummary: vi.fn().mockResolvedValue(''),
 }));
 
-// Mock wxt/browser
 vi.mock('wxt/browser', () => ({
     browser: {
         tabs: {
@@ -56,6 +51,8 @@ vi.mock('wxt/browser', () => ({
     },
 }));
 
+const mockedStorage = vi.mocked(storage);
+
 describe('handleNudgeDismissed', () => {
     beforeEach(() => {
         vi.clearAllMocks();
@@ -64,7 +61,7 @@ describe('handleNudgeDismissed', () => {
     it('sets lastNudge timestamp and returns success', async () => {
         const result = await handleNudgeDismissed();
 
-        expect(mockStorage.setLastNudge).toHaveBeenCalled();
+        expect(mockedStorage.setLastNudge).toHaveBeenCalled();
         expect(result).toEqual({ success: true });
     });
 });
@@ -79,7 +76,7 @@ describe('handleGetTodos', () => {
             { id: '1', text: 'Test todo', completed: false },
             { id: '2', text: 'Another todo', completed: true },
         ];
-        mockStorage.getTodos.mockResolvedValue(mockTodos);
+        mockedStorage.getTodos.mockResolvedValue(mockTodos);
 
         const result = await handleGetTodos();
 
@@ -87,7 +84,7 @@ describe('handleGetTodos', () => {
     });
 
     it('returns empty array when no todos', async () => {
-        mockStorage.getTodos.mockResolvedValue([]);
+        mockedStorage.getTodos.mockResolvedValue([]);
 
         const result = await handleGetTodos();
 
@@ -105,11 +102,11 @@ describe('handleToggleTodo', () => {
             { id: '1', text: 'Test todo', completed: false },
             { id: '2', text: 'Another', completed: true },
         ];
-        mockStorage.getTodos.mockResolvedValue(mockTodos);
+        mockedStorage.getTodos.mockResolvedValue(mockTodos);
 
         const result = await handleToggleTodo({ type: 'TOGGLE_TODO', todoId: '1' });
 
-        expect(mockStorage.setTodos).toHaveBeenCalledWith([
+        expect(mockedStorage.setTodos).toHaveBeenCalledWith([
             { id: '1', text: 'Test todo', completed: true },
             { id: '2', text: 'Another', completed: true },
         ]);
@@ -117,11 +114,11 @@ describe('handleToggleTodo', () => {
     });
 
     it('sets lastNudge after toggle', async () => {
-        mockStorage.getTodos.mockResolvedValue([]);
+        mockedStorage.getTodos.mockResolvedValue([]);
 
         await handleToggleTodo({ type: 'TOGGLE_TODO', todoId: '1' });
 
-        expect(mockStorage.setLastNudge).toHaveBeenCalled();
+        expect(mockedStorage.setLastNudge).toHaveBeenCalled();
     });
 });
 
@@ -136,7 +133,7 @@ describe('handleGetCurrentFocus', () => {
             pageTitle: 'Test',
             startTime: Date.now(),
         };
-        mockStorage.getCurrentFocus.mockResolvedValue(mockFocus);
+        mockedStorage.getCurrentFocus.mockResolvedValue(mockFocus);
 
         const result = await handleGetCurrentFocus();
 
@@ -144,7 +141,7 @@ describe('handleGetCurrentFocus', () => {
     });
 
     it('returns null when no focus session', async () => {
-        mockStorage.getCurrentFocus.mockResolvedValue(null);
+        mockedStorage.getCurrentFocus.mockResolvedValue(null);
 
         const result = await handleGetCurrentFocus();
 
@@ -170,7 +167,7 @@ describe('routeMessage', () => {
 
     it('routes GET_TODOS to correct handler', async () => {
         const mockTodos = [{ id: '1', text: 'Test', completed: false }];
-        mockStorage.getTodos.mockResolvedValue(mockTodos);
+        mockedStorage.getTodos.mockResolvedValue(mockTodos);
 
         const result = await routeMessage(
             { type: 'GET_TODOS' },
@@ -202,7 +199,7 @@ describe('routeMessage', () => {
     });
 
     it('routes GET_CURRENT_FOCUS to correct handler', async () => {
-        mockStorage.getCurrentFocus.mockResolvedValue(null);
+        mockedStorage.getCurrentFocus.mockResolvedValue(null);
 
         const result = await routeMessage(
             { type: 'GET_CURRENT_FOCUS' },

@@ -10,6 +10,7 @@ import CalendarView from '@/components/CalendarView';
 import { storage } from '@/lib/storage';
 import type { BlacklistEntry, WhitelistEntry, Settings, TodoCategory } from '@/lib/types';
 import { DEFAULT_SETTINGS } from '@/lib/constants';
+import { Progress } from '@/components/ui/progress';
 
 const t = (key: string, substitutions?: string | string[]) =>
     browser.i18n.getMessage(key as any, substitutions) || key;
@@ -25,6 +26,10 @@ function ConfigsApp() {
     const [newCategoryName, setNewCategoryName] = useState('');
     const [newCategoryKeywords, setNewCategoryKeywords] = useState<string[]>([]);
     const [newCategoryKeywordInput, setNewCategoryKeywordInput] = useState('');
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [downloadProgress, setDownloadProgress] = useState(0);
+    const [currentDownloadModel, setCurrentDownloadModel] = useState<'language-model' | 'summarizer' | 'both' | null>(null);
+    const [aiError, setAiError] = useState<string | null>(null);
 
     useEffect(() => {
         const loadData = async () => {
@@ -38,6 +43,18 @@ function ConfigsApp() {
             setWhitelist(wl);
             setSettings(s);
             setCategories(cats);
+
+            // Check if AI download is in progress
+            try {
+                const downloadStatus = await browser.runtime.sendMessage({ type: 'GET_AI_DOWNLOAD_STATUS' });
+                if (downloadStatus?.isDownloading) {
+                    setIsDownloading(true);
+                    setDownloadProgress(downloadStatus.progress || 0);
+                    setCurrentDownloadModel(downloadStatus.currentModel || null);
+                }
+            } catch (e) {
+                // Ignore errors if background script not ready
+            }
         };
         loadData();
     }, []);
@@ -69,10 +86,72 @@ function ConfigsApp() {
     }, []);
 
     const handleToggleAI = useCallback(async (enabled: boolean) => {
-        const updatedSettings = { ...settings, aiEnabled: enabled };
-        setSettings(updatedSettings);
-        await storage.setSettings(updatedSettings);
+        if (!enabled) {
+            // Turning off is always allowed
+            const updatedSettings = { ...settings, aiEnabled: false };
+            setSettings(updatedSettings);
+            setAiError(null);
+            setIsDownloading(false);
+            await storage.setSettings(updatedSettings);
+            return;
+        }
+
+        try {
+            setAiError(null);
+            // Send message to background to enable AI
+            const response = await browser.runtime.sendMessage({ type: 'ENABLE_AI' });
+
+            if (response?.error) {
+                setAiError(response.error);
+                return;
+            }
+
+            if (response?.isDownloading) {
+                setIsDownloading(true);
+                setDownloadProgress(response.progress || 0);
+                setCurrentDownloadModel(response.currentModel || null);
+            } else if (response?.success) {
+                // Already available, update UI
+                const updatedSettings = { ...settings, aiEnabled: true };
+                setSettings(updatedSettings);
+            }
+        } catch (error) {
+            console.error('Error enabling AI', error);
+            setAiError('An error occurred while enabling AI.');
+        }
     }, [settings]);
+
+    // Poll for AI download status when downloading
+    useEffect(() => {
+        if (!isDownloading) return;
+
+        const pollStatus = async () => {
+            try {
+                const response = await browser.runtime.sendMessage({ type: 'GET_AI_DOWNLOAD_STATUS' });
+
+                if (response?.error) {
+                    setAiError(response.error);
+                    setIsDownloading(false);
+                    return;
+                }
+
+                setDownloadProgress(response.progress || 0);
+                setCurrentDownloadModel(response.currentModel || null);
+
+                if (!response.isDownloading) {
+                    setIsDownloading(false);
+                    // Reload settings to get updated aiEnabled state
+                    const loadedSettings = await storage.getSettings();
+                    setSettings(loadedSettings);
+                }
+            } catch (error) {
+                console.error('Error polling AI download status', error);
+            }
+        };
+
+        const interval = setInterval(pollStatus, 200);
+        return () => clearInterval(interval);
+    }, [isDownloading]);
 
     const handleAddCategory = useCallback(async () => {
         const name = newCategoryName.trim();
@@ -350,8 +429,67 @@ function ConfigsApp() {
                                                 <p className="text-xs text-slate-500">{settings.aiEnabled ? t('aiStatusEnabled') : t('aiStatusDisabled')}</p>
                                             </div>
                                         </div>
-                                        <Switch checked={settings.aiEnabled} onCheckedChange={handleToggleAI} />
+                                        <Switch checked={settings.aiEnabled} onCheckedChange={handleToggleAI} disabled={isDownloading} />
                                     </div>
+
+                                    {isDownloading && (
+                                        <div className="space-y-2 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                                            <div className="flex justify-between items-center text-xs text-slate-600">
+                                                <span>
+                                                    {currentDownloadModel === 'both'
+                                                        ? t('downloadingBothModels')
+                                                        : currentDownloadModel === 'language-model'
+                                                            ? t('downloadingLanguageModel')
+                                                            : currentDownloadModel === 'summarizer'
+                                                                ? t('downloadingSummarizer')
+                                                                : t('downloadingModels')}
+                                                    ...
+                                                </span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="font-medium">{Math.round(downloadProgress)}%</span>
+                                                    <button
+                                                        onClick={async () => {
+                                                            await browser.runtime.sendMessage({ type: 'CANCEL_AI_DOWNLOAD' });
+                                                            setIsDownloading(false);
+                                                            setDownloadProgress(0);
+                                                            setCurrentDownloadModel(null);
+                                                        }}
+                                                        className="text-rose-500 hover:text-rose-700 font-medium cursor-pointer"
+                                                    >
+                                                        {t('cancelDownload')}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <Progress value={downloadProgress} className="h-1.5" />
+                                        </div>
+                                    )}
+
+                                    {aiError && (
+                                        <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg break-words">
+                                            <p>{aiError}</p>
+                                            {aiError.includes('Please enable') && (
+                                                <>
+                                                    <ul className="list-disc pl-4 mt-2 space-y-1 text-xs">
+                                                        {[
+                                                            'chrome://flags/#prompt-api-for-gemini-nano',
+                                                            'chrome://flags/#prompt-api-for-gemini-nano-multimodal-input',
+                                                            'chrome://flags/#summarization-api-for-gemini-nano'
+                                                        ].map(url => (
+                                                            <li key={url}>
+                                                                <button
+                                                                    className="text-left underline hover:text-red-800 font-medium cursor-pointer"
+                                                                    onClick={() => browser.tabs.create({ url })}
+                                                                >
+                                                                    {url}
+                                                                </button>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                    <p className="mt-2 font-medium text-xs">{t('relaunchChromeNote')}</p>
+                                                </>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </TabsContent>
                         </Tabs>
