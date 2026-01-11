@@ -2,7 +2,7 @@ import { browser } from 'wxt/browser';
 import { storage } from '@/lib/storage';
 import { NUDGE_COOLDOWN, TAB_SWITCH_THRESHOLD as URL_SWITCH_THRESHOLD, TAB_SWITCH_WINDOW as URL_SWITCH_WINDOW } from '@/lib/constants';
 import type { URLVisit } from '@/lib/types';
-import { getBaseUrl, getAIResponseLanguage, ICON_PATHS } from '@/lib/backgroundUtils';
+import { getContextUrl } from '@/lib/backgroundUtils';
 import { setIconState } from '@/lib/iconManager';
 import { getTabSummary, getBatchTabSummaries, checkContentSimilarity, analyzeTabSwitchingDrift } from '@/lib/aiService';
 import { routeMessage, type BackgroundMessage, type MessageContext } from '@/lib/messageHandlers';
@@ -214,19 +214,19 @@ function startPeriodicFocusCheck() {
       const tab = await browser.tabs.get(currentActiveTabId);
       if (!tab.url) return;
 
-      const currentBaseUrl = getBaseUrl(tab.url);
+      const currentContextUrl = getContextUrl(tab.url);
       const checkedUrls = await storage.getCheckedUrls();
-      if (checkedUrls.includes(currentBaseUrl)) {
+      if (checkedUrls.includes(currentContextUrl)) {
         return;
       }
 
-      if (lastCheckedUrl === currentBaseUrl) {
+      if (lastCheckedUrl === currentContextUrl) {
         console.debug('[FetchFocus] Periodic check triggered (same URL for 10s)');
-        await storage.addCheckedUrl(currentBaseUrl);
+        await storage.addCheckedUrl(currentContextUrl);
         await triggerFocusContextCheck();
       }
 
-      lastCheckedUrl = currentBaseUrl;
+      lastCheckedUrl = currentContextUrl;
     } catch (e) {
       // Tab may have been closed
     }
@@ -310,14 +310,14 @@ async function checkURLSwitchingDrift() {
   const recentURLs = await storage.getRecentURLs();
   const lastMinuteURLs = recentURLs.filter(t => now - t.timestamp < URL_SWITCH_WINDOW);
   const uniqueUrls = new Set<URLVisit>();
-  let focusBaseUrl = '';
+  let focusContextUrl = '';
   if (currentFocus.pageUrl) {
-    focusBaseUrl = getBaseUrl(currentFocus.pageUrl);
+    focusContextUrl = getContextUrl(currentFocus.pageUrl);
   }
   const validVisits = lastMinuteURLs.filter(t => {
     if (!t.url) return false;
-    const baseUrl = getBaseUrl(t.url);
-    if (!!focusBaseUrl && baseUrl === focusBaseUrl) return false;
+    const contextUrl = getContextUrl(t.url);
+    if (!!focusContextUrl && contextUrl === focusContextUrl) return false;
     uniqueUrls.add(t);
     return true;
   });

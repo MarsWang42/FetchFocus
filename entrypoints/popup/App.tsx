@@ -546,13 +546,6 @@ function App() {
                               {todo.text}
                             </button>
                           ))}
-                        {todos.some(t => !t.completed && (currentFocusDescription === '' || t.text.toLowerCase().includes(currentFocusDescription.toLowerCase()))) ? null : (
-                          currentFocusDescription && (
-                            <div className="px-3 py-2 text-sm text-slate-400 italic">
-                              {t('willCreateNewTask')}
-                            </div>
-                          )
-                        )}
                       </div>
                     )}
                   </div>

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
     getBaseUrl,
+    getContextUrl,
     areTitlesRelated,
     isInResearchPages,
     getAIResponseLanguage,
@@ -45,6 +46,84 @@ describe('getBaseUrl', () => {
 
     it('handles root paths', () => {
         expect(getBaseUrl('https://example.com/')).toBe('https://example.com/');
+    });
+});
+
+describe('getContextUrl', () => {
+    describe('sites with significant query params', () => {
+        it('preserves YouTube v parameter', () => {
+            expect(getContextUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ')).toBe(
+                'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+            );
+        });
+
+        it('preserves YouTube v and list parameters', () => {
+            expect(
+                getContextUrl('https://www.youtube.com/watch?v=abc123&list=PLxyz')
+            ).toBe('https://www.youtube.com/watch?v=abc123&list=PLxyz');
+        });
+
+        it('strips non-significant YouTube params', () => {
+            expect(
+                getContextUrl('https://www.youtube.com/watch?v=abc123&t=120&feature=share')
+            ).toBe('https://www.youtube.com/watch?v=abc123');
+        });
+
+        it('preserves Google search query', () => {
+            expect(getContextUrl('https://www.google.com/search?q=test+query')).toBe(
+                'https://www.google.com/search?q=test+query'
+            );
+        });
+
+        it('preserves Bing search query', () => {
+            expect(getContextUrl('https://www.bing.com/search?q=test')).toBe(
+                'https://www.bing.com/search?q=test'
+            );
+        });
+
+        it('preserves Amazon product params', () => {
+            expect(getContextUrl('https://www.amazon.com/dp/B08N5WRWNW')).toBe(
+                'https://www.amazon.com/dp/B08N5WRWNW'
+            );
+        });
+
+        it('works without www prefix', () => {
+            expect(getContextUrl('https://youtube.com/watch?v=xyz789')).toBe(
+                'https://youtube.com/watch?v=xyz789'
+            );
+        });
+    });
+
+    describe('sites without significant query params', () => {
+        it('strips all query params for unknown sites', () => {
+            expect(getContextUrl('https://example.com/page?foo=bar&baz=qux')).toBe(
+                'https://example.com/page'
+            );
+        });
+
+        it('returns base URL for sites without query params', () => {
+            expect(getContextUrl('https://github.com/user/repo')).toBe(
+                'https://github.com/user/repo'
+            );
+        });
+    });
+
+    describe('edge cases', () => {
+        it('handles YouTube URL without v param', () => {
+            expect(getContextUrl('https://www.youtube.com/')).toBe(
+                'https://www.youtube.com/'
+            );
+        });
+
+        it('returns original string for invalid URLs', () => {
+            expect(getContextUrl('not-a-url')).toBe('not-a-url');
+        });
+
+        it('handles URLs with hash fragments', () => {
+            expect(getContextUrl('https://www.youtube.com/watch?v=abc#t=30')).toBe(
+                'https://www.youtube.com/watch?v=abc'
+            );
+        });
     });
 });
 

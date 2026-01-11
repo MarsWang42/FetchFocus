@@ -13,6 +13,50 @@ export function getBaseUrl(url: string): string {
 }
 
 /**
+ * Query parameters that are significant for identifying content changes on specific sites.
+ * These params will be preserved when comparing URLs for context detection.
+ */
+const SIGNIFICANT_QUERY_PARAMS: Record<string, string[]> = {
+    'youtube.com': ['v', 'list'],
+    'www.youtube.com': ['v', 'list'],
+    'google.com': ['q'],
+    'www.google.com': ['q'],
+    'bing.com': ['q'],
+    'www.bing.com': ['q'],
+    'duckduckgo.com': ['q'],
+    'amazon.com': ['dp', 'asin'],
+    'www.amazon.com': ['dp', 'asin'],
+};
+
+/**
+ * Extract a context-aware URL that preserves significant query parameters.
+ * Unlike getBaseUrl, this keeps query params that identify different content
+ * (e.g., YouTube's ?v= for different videos).
+ */
+export function getContextUrl(url: string): string {
+    try {
+        const parsed = new URL(url);
+        const baseUrl = `${parsed.origin}${parsed.pathname}`;
+        const significantParams = SIGNIFICANT_QUERY_PARAMS[parsed.hostname];
+
+        if (significantParams) {
+            const preserved = new URLSearchParams();
+            for (const param of significantParams) {
+                if (parsed.searchParams.has(param)) {
+                    preserved.set(param, parsed.searchParams.get(param)!);
+                }
+            }
+            if (preserved.toString()) {
+                return `${baseUrl}?${preserved.toString()}`;
+            }
+        }
+        return baseUrl;
+    } catch {
+        return url;
+    }
+}
+
+/**
  * Check if two titles are related based on word overlap
  * Returns true if at least 2 significant words (>3 chars) overlap
  */
