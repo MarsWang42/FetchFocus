@@ -346,11 +346,11 @@ function App() {
       );
 
       if (matchingTodo) {
-        // Record as completed task for the calendar (same as handleToggleTodo)
-        await storage.recordCompletedTask(matchingTodo.text);
+        // Note: storage.recordCompletedTask is called by the background script's COMPLETE_FOCUS handler
+        // Only update local UI state here
         setCompletedTodayCount(prev => prev + 1);
 
-        // Remove from todos list (same as handleToggleTodo)
+        // Remove from todos list
         const updatedTodos = todos.filter(t => t.id !== matchingTodo.id);
         setTodos(updatedTodos);
         await storage.setTodos(updatedTodos);
